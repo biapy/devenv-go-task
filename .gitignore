@@ -4,3 +4,11 @@ result-*
 
 # Ignore automatically generated direnv output
 .direnv
+
+# Generated taskfiles (when testing)
+Taskfile.yml
+Taskfile.dist.yml
+
+# Test artifacts
+coverage.out
+coverage.html
