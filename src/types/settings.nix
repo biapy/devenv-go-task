@@ -42,5 +42,11 @@ lib.types.submodule {
       description = "Global silent mode";
       default = false;
     };
+
+    shopt = lib.mkOption {
+      type = nullOr (lib.types.listOf (lib.types.enum [ "expand_aliases", "globstar", "nullglob" ]));
+      description = "Bash shell options for all commands";
+      default = null;
+    };
   };
 }
