@@ -1,18 +1,23 @@
 # devenv-go-task
 
-A devenv.nix module for integrating [go-task](https://taskfile.dev/) into your development environment. This module automatically adds go-task to your devenv packages and provides declarative configuration for your tasks through Nix.
+A devenv.nix module for integrating [go-task](https://taskfile.dev/)
+into your development environment.
+This module automatically adds go-task to your devenv packages
+and provides declarative configuration for your tasks through Nix.
 
 ## Features
 
 - Automatically adds go-task to your devenv packages
 - Declarative task configuration in Nix
 - Automatic generation of Taskfile.yml from Nix configuration
-- Support for all go-task features including dependencies, variables, environment variables, and more
+- Support for all go-task features including dependencies, variables,
+  environment variables, and more
 - Configurable taskfile location (defaults to `Taskfile.dist.yml`)
 
 ## Usage
 
-To use `devenv-go-task` in your devenv config, first add it as an input in your `devenv.yaml`:
+To use `devenv-go-task` in your devenv config,
+first add it as an input in your `devenv.yaml`:
 
 ```yaml
 inputs:
@@ -25,10 +30,15 @@ inputs:
 Then in your `devenv.nix`, import and configure the plugin:
 
 ```nix
-{ pkgs, lib, config, inputs, ... }:
 {
-  imports = [ inputs.devenv-go-task.plugin ];
-  
+  pkgs,
+  lib,
+  config,
+  inputs,
+  ...
+}: {
+  imports = [inputs.devenv-go-task.plugin];
+
   go-task.enable = true;
   go-task.settings = {
     vars = {
@@ -45,19 +55,19 @@ Then in your `devenv.nix`, import and configure the plugin:
         "echo 'Building project...'"
         "go build -o dist/app ./cmd/app"
       ];
-      sources = [ "**/*.go" ];
-      generates = [ "dist/app" ];
+      sources = ["**/*.go"];
+      generates = ["dist/app"];
     };
-    
+
     test = {
       desc = "Run tests";
-      cmds = [ "go test ./..." ];
-      deps = [ "build" ];
+      cmds = ["go test ./..."];
+      deps = ["build"];
     };
-    
+
     clean = {
       desc = "Clean build artifacts";
-      cmds = [ "rm -rf dist/" ];
+      cmds = ["rm -rf dist/"];
     };
   };
 }
@@ -67,28 +77,32 @@ Then in your `devenv.nix`, import and configure the plugin:
 
 ### `go-task.enable`
 
-**Type:** `bool`  
+**Type:** `bool`\
 **Default:** `false`
 
-Enable the go-task module. When enabled, go-task will be added to your devenv packages and the taskfile will be generated.
+Enable the go-task module.
+When enabled, go-task will be added to your devenv packages
+and the taskfile will be generated.
 
 ### `go-task.package`
 
-**Type:** `package`  
+**Type:** `package`\
 **Default:** `pkgs.go-task`
 
-The go-task package to use. You can override this to use a different version or build of go-task.
+The go-task package to use.
+You can override this to use a different version or build of go-task.
 
 ### `go-task.taskfile`
 
-**Type:** `str`  
+**Type:** `str`\
 **Default:** `"Taskfile.dist.yml"`
 
-The path where the generated taskfile will be written. This is relative to your project root.
+The path where the generated taskfile will be written.
+This is relative to your project root.
 
 ### `go-task.settings`
 
-**Type:** `submodule`  
+**Type:** `submodule`\
 **Default:** `{}`
 
 Global taskfile settings that apply to all tasks:
@@ -96,41 +110,50 @@ Global taskfile settings that apply to all tasks:
 #### Settings Options
 
 - **`version`** (`str`, default: `"3"`): Taskfile format version
-- **`vars`** (`attrsOf str`, default: `{}`): Global variables available to all tasks
+- **`vars`** (`attrsOf str`, default: `{}`): Global variables available
+  to all tasks
 - **`env`** (`attrsOf str`, default: `{}`): Global environment variables
 - **`dotenv`** (`listOf str`, default: `[]`): Dotenv files to load
-- **`output`** (`nullOr enum`, default: `null`): Output mode (`"interleaved"`, `"group"`, or `"prefixed"`)
+- **`output`** (`nullOr enum`, default: `null`): Output mode
+  (`"interleaved"`, `"group"`, or `"prefixed"`)
 - **`silent`** (`bool`, default: `false`): Global silent mode
 
 ### `go-task.tasks`
 
-**Type:** `attrsOf (submodule)`  
+**Type:** `attrsOf (submodule)`\
 **Default:** `{}`
 
-An attribute set defining your tasks. Each task can have the following options:
+An attribute set defining your tasks.
+Each task can have the following options:
 
 #### Task Options
 
-- **`desc`** (`nullOr str`, default: `null`): Task description shown in `task --list`
+- **`desc`** (`nullOr str`, default: `null`):
+  Task description shown in `task --list`
 - **`cmds`** (`listOf str`, default: `[]`): Commands to execute for this task
-- **`deps`** (`listOf str`, default: `[]`): Task dependencies that must run first
-- **`sources`** (`listOf str`, default: `[]`): Source files that trigger task execution when changed
+- **`deps`** (`listOf str`, default: `[]`):
+  Task dependencies that must run first
+- **`sources`** (`listOf str`, default: `[]`):
+  Source files that trigger task execution when changed
 - **`generates`** (`listOf str`, default: `[]`): Files generated by this task
 - **`vars`** (`attrsOf str`, default: `{}`): Task-specific variables
 - **`env`** (`attrsOf str`, default: `{}`): Task-specific environment variables
 - **`silent`** (`bool`, default: `false`): Suppress command output
-- **`method`** (`nullOr enum ["checksum" "timestamp" "none"]`, default: `null`): Method to check if task is up-to-date
+- **`method`** (`nullOr enum ["checksum" "timestamp" "none"]`, default: `null`):
+  Method to check if task is up-to-date
 - **`dir`** (`nullOr str`, default: `null`): Directory to run the task in
-- **`preconditions`** (`listOf submodule`, default: `[]`): Conditions that must be met before running the task
+- **`preconditions`** (`listOf submodule`, default: `[]`):
+  Conditions that must be met before running the task
   - **`sh`** (`str`): Shell command to check
   - **`msg`** (`nullOr str`, default: `null`): Error message if precondition fails
 
 ## Example
 
-See the [example](./example/) directory for a complete working example showing various task configurations including:
+See the [example](./example/) directory for a complete working example
+showing various task configurations including:
 
 - Build tasks with source tracking
-- Test tasks with dependencies  
+- Test tasks with dependencies
 - Development server tasks with variables and environment
 - Cleanup tasks
 - Global variables and environment settings
@@ -141,18 +164,23 @@ See the [example](./example/) directory for a complete working example showing v
 Here's a more comprehensive example showing advanced features:
 
 ```nix
-{ pkgs, lib, config, inputs, ... }:
 {
-  imports = [ inputs.devenv-go-task.plugin ];
-  
+  pkgs,
+  lib,
+  config,
+  inputs,
+  ...
+}: {
+  imports = [inputs.devenv-go-task.plugin];
+
   go-task.enable = true;
   go-task.taskfile = "Taskfile.yml";
-  
+
   # Global settings
   go-task.settings = {
     version = "3";
     vars = {
-      APP_NAME = "myapp";
+      APP_NAME = "my-app";
       BUILD_DIR = "dist";
       VERSION = "1.0.0";
     };
@@ -161,16 +189,16 @@ Here's a more comprehensive example showing advanced features:
       GOOS = "linux";
     };
     output = "prefixed";
-    dotenv = [ ".env" ".env.local" ];
+    dotenv = [".env" ".env.local"];
   };
-  
+
   go-task.tasks = {
     # Default task
     default = {
       desc = "Run development tasks";
-      deps = [ "install" "build" "test" ];
+      deps = ["install" "build" "test"];
     };
-    
+
     # Installation
     install = {
       desc = "Install dependencies";
@@ -178,7 +206,7 @@ Here's a more comprehensive example showing advanced features:
         "go mod download"
         "go mod tidy"
       ];
-      sources = [ "go.mod" "go.sum" ];
+      sources = ["go.mod" "go.sum"];
       preconditions = [
         {
           sh = "which go";
@@ -186,24 +214,24 @@ Here's a more comprehensive example showing advanced features:
         }
       ];
     };
-    
+
     # Building
     build = {
       desc = "Build the application";
-      deps = [ "install" ];
+      deps = ["install"];
       cmds = [
         "mkdir -p {{.BUILD_DIR}}"
         "go build -ldflags '-X main.version={{.VERSION}}' -o {{.BUILD_DIR}}/{{.APP_NAME}} ./cmd/{{.APP_NAME}}"
       ];
-      sources = [ "**/*.go" "go.mod" "go.sum" ];
-      generates = [ "{{.BUILD_DIR}}/{{.APP_NAME}}" ];
+      sources = ["**/*.go" "go.mod" "go.sum"];
+      generates = ["{{.BUILD_DIR}}/{{.APP_NAME}}"];
       method = "checksum";
     };
-    
+
     # Testing
     test = {
       desc = "Run all tests";
-      deps = [ "install" ];
+      deps = ["install"];
       cmds = [
         "go test -v -race ./..."
       ];
@@ -211,23 +239,23 @@ Here's a more comprehensive example showing advanced features:
         GO_ENV = "test";
       };
     };
-    
+
     # Coverage
     coverage = {
       desc = "Generate test coverage report";
-      deps = [ "install" ];
+      deps = ["install"];
       cmds = [
         "go test -v -race -coverprofile=coverage.out ./..."
         "go tool cover -html=coverage.out -o coverage.html"
         "echo 'Coverage report: coverage.html'"
       ];
-      generates = [ "coverage.out" "coverage.html" ];
+      generates = ["coverage.out" "coverage.html"];
     };
-    
+
     # Development server
     dev = {
       desc = "Start development server";
-      deps = [ "build" ];
+      deps = ["build"];
       cmds = [
         "./{{.BUILD_DIR}}/{{.APP_NAME}}"
       ];
@@ -239,16 +267,16 @@ Here's a more comprehensive example showing advanced features:
         LOG_LEVEL = "debug";
       };
     };
-    
+
     # Docker operations
     docker-build = {
       desc = "Build Docker image";
-      deps = [ "build" ];
+      deps = ["build"];
       cmds = [
         "docker build -t {{.APP_NAME}}:{{.VERSION}} ."
         "docker tag {{.APP_NAME}}:{{.VERSION}} {{.APP_NAME}}:latest"
       ];
-      sources = [ "Dockerfile" "{{.BUILD_DIR}}/{{.APP_NAME}}" ];
+      sources = ["Dockerfile" "{{.BUILD_DIR}}/{{.APP_NAME}}"];
       preconditions = [
         {
           sh = "which docker";
@@ -260,7 +288,7 @@ Here's a more comprehensive example showing advanced features:
         }
       ];
     };
-    
+
     # Cleanup
     clean = {
       desc = "Clean all build artifacts";
@@ -270,26 +298,31 @@ Here's a more comprehensive example showing advanced features:
         "go clean -cache -testcache -modcache"
       ];
     };
-    
+
     # Linting and formatting
     lint = {
       desc = "Run linter";
       cmds = [
         "golangci-lint run"
       ];
-      sources = [ "**/*.go" ];
+      sources = ["**/*.go"];
     };
-    
+
     format = {
       desc = "Format code";
       cmds = [
         "go fmt ./..."
         "goimports -w ."
       ];
-      sources = [ "**/*.go" ];
+      sources = ["**/*.go"];
     };
   };
 }
+```
+
+<!--
+CSpell:ignore -testcache -modcache -coverprofile ldflags golangci goimports
+-->
 
 ## Integration with devenv
 
@@ -314,7 +347,9 @@ task --verbose test
 
 ## Comparison with Manual Configuration
 
-Instead of maintaining a separate `Taskfile.yml`, you can now define your tasks directly in your `devenv.nix` configuration. This provides:
+Instead of maintaining a separate `Taskfile.yml`,
+you can now define your tasks directly in your `devenv.nix` configuration.
+This provides:
 
 - **Type safety**: Nix will validate your task configuration
 - **Integration**: Tasks can reference other parts of your devenv config

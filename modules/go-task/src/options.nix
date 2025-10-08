@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   inherit (config.devenv) root;
 in
@@ -23,7 +28,7 @@ in
     default = "${root}/.taskrc.yml";
   };
 
-  taskfile = lib.mkOption {
+  taskfilePath = lib.mkOption {
     type = lib.types.str;
     description = "Path to the taskfile to generate";
     defaultText = "\${DEVENV_ROOT}/Taskfile.dist.yml";
@@ -31,20 +36,19 @@ in
   };
 
   taskrc = lib.mkOption {
-    type = (import ./types/taskrc.nix);
-    type = lib.types.str;
+    type = import ./types/taskrc.nix;
     description = "Task configuration, stored in '.taskrc.yml'. See https://taskfile.dev/docs/reference/config";
-    default = {};
+    default = { };
   };
 
   settings = lib.mkOption {
-    type = (import ./types/settings.nix);
+    type = import ./types/settings.nix;
     description = "Global taskfile settings";
     default = { };
   };
 
   tasks = lib.mkOption {
-    type = (import ./types/task.nix);
+    type = import ./types/task.nix;
     description = "Task definitions";
     default = { };
   };

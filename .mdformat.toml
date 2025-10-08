@@ -6,17 +6,11 @@ end_of_line = "lf"  # possible values: {"lf", "crlf", "keep"}
 validate = true     # options: {false, true}
 
 extensions = [      # options: a list of enabled extensions (default: all installed are enabled)
-  # "admon",
-  # "footnote",
-  "frontmatter",
-  "gfm",
-  # "gfm-alerts",
-  # "mkdocs",
-  # "myst",
-  # "simple-breaks",
-  "tables",
+  #"gfm",
+  #"gfm-alerts",
+  # "tables",
   # "toc",
-  "wikilink",
+  #"wikilink",
 ]
 
 # codeformatters = [  # options: a list of enabled code formatter languages (default: all installed are enabled)

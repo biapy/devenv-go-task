@@ -1,11 +1,10 @@
-{ pkgs, lib, config, inputs, ... }:
-
+{ ... }:
 {
   imports = [ ../default.nix ];
-  
+
   # Minimal configuration test
   go-task.enable = true;
-  
+
   go-task.tasks = {
     hello = {
       desc = "Say hello";

@@ -1,16 +1,17 @@
 # Architecture
 
-This document explains the architecture and design decisions for the devenv-go-task module.
+This document explains the architecture and design decisions for the
+`devenv-go-task` module.
 
 ## Overview
 
-The devenv-go-task module is designed as a devenv.nix plugin that provides declarative configuration for go-task, a task runner/build tool written in Go. The module follows the same pattern established by other devenv modules like devenv-zsh.
+The devenv-go-task module is designed as a devenv.nix plugin that provides
+declarative configuration for go-task, a task runner/build tool written in Go.
 
 ## File Structure
 
-```
-├── default.nix          # Main module definition
-├── flake.nix            # Flake wrapper for the plugin
+```text
+├── modules/go-task/devenv.nix          # Main module definition
 ├── example/             # Example usage
 │   ├── devenv.nix       # Example devenv configuration
 │   └── devenv.yaml      # Example devenv inputs
@@ -50,23 +51,30 @@ go-task = {
 
 ### Configuration Processing
 
-1. **Option Definition**: All configuration options are defined using NixOS module system with proper types, defaults, and descriptions.
+1. **Option Definition**: All configuration options are defined by using NixOS
+   module system with proper types, defaults, and descriptions.
 
-2. **Data Transformation**: The configuration is transformed from Nix attribute sets to YAML-compatible data structures.
+2. **Data Transformation**: The configuration is transformed from Nix attribute
+   sets to YAML-compatible data structures.
 
-3. **Filtering**: Empty/null values are filtered out to produce clean YAML output.
+3. **Filtering**: Empty/null values are filtered out to produce clean YAML
+   output.
 
-4. **YAML Generation**: The processed configuration is converted to YAML using `lib.generators.toYAML`.
+4. **YAML Generation**: The processed configuration is converted to YAML
+   using `lib.generators.toYAML`.
 
-5. **File Creation**: A text file containing the YAML is created using `pkgs.writeText`.
+5. **File Creation**: A text file containing the YAML is created by using
+   `pkgs.writeText`.
 
-6. **Integration**: The generated taskfile is copied to the project directory during `enterShell`.
+6. **Integration**: The generated taskfile is copied to the project directory
+   during `enterShell`.
 
 ### Key Design Decisions
 
 #### 1. Comprehensive Option Coverage
 
 The module supports all major go-task features:
+
 - Global settings (vars, env, output modes)
 - Task-specific configurations
 - Dependencies and preconditions
@@ -76,6 +84,7 @@ The module supports all major go-task features:
 #### 2. Type Safety
 
 All options use proper Nix types:
+
 - `lib.types.bool` for boolean flags
 - `lib.types.str` for strings
 - `lib.types.listOf` for arrays
@@ -102,11 +111,14 @@ All options use proper Nix types:
 
 The YAML generation process handles several edge cases:
 
-1. **Empty Value Filtering**: Null values, empty lists, empty attribute sets, and false booleans are filtered out to avoid cluttering the output.
+1. **Empty Value Filtering**: Null values, empty lists, empty attribute sets,
+   and false booleans are filtered out to avoid cluttering the output.
 
-2. **Nested Structure Support**: Task preconditions are handled as nested submodules with proper conversion.
+2. **Nested Structure Support**: Task preconditions are handled as nested
+   submodules with proper conversion.
 
-3. **Type Preservation**: Strings, numbers, and booleans are preserved correctly in the YAML output.
+3. **Type Preservation**: Strings, numbers, and booleans are preserved
+   correctly in the YAML output.
 
 ### Error Handling
 
@@ -126,13 +138,14 @@ The module is designed to fail gracefully:
 
 The module can be extended in several ways:
 
-1. **Additional Task Options**: New go-task features can be added by extending the task submodule.
-
-2. **Global Settings**: New global options can be added to the settings submodule.
-
-3. **Custom Validation**: Additional validation can be added using `lib.mkAssert`.
-
-4. **Integration**: Additional devenv integration points can be added beyond `enterShell`.
+1. **Additional Task Options**: New go-task features can be added by
+   extending the task submodule.
+2. **Global Settings**: New global options can be added to the settings
+   submodule.
+3. **Custom Validation**: Additional validation can be added using
+   `lib.mkAssert`.
+4. **Integration**: Additional devenv integration points can be added beyond
+   `enterShell`.
 
 ## Testing Strategy
 
@@ -148,6 +161,7 @@ The module includes several test configurations:
 ### Manual Taskfile Management
 
 **Advantages of devenv-go-task:**
+
 - Declarative configuration
 - Type safety
 - Integration with devenv
@@ -155,6 +169,7 @@ The module includes several test configurations:
 - Reusable configurations
 
 **Advantages of manual Taskfile.yml:**
+
 - Direct control over YAML structure
 - IDE support for YAML editing
 - No dependency on Nix knowledge
@@ -162,6 +177,7 @@ The module includes several test configurations:
 ### Other Task Runners
 
 The module specifically targets go-task because:
+
 - Active development and good documentation
 - YAML-based configuration (easy to generate)
 - Rich feature set (dependencies, variables, etc.)

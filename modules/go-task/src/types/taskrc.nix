@@ -11,7 +11,7 @@ types.submodule {
     };
 
     concurrency = lib.mkOption {
-      type = types.nullOr(types.integer);
+      type = types.nullOr types.integer;
       description = "Number of concurrent tasks to run";
       default = null;
     };
@@ -19,7 +19,7 @@ types.submodule {
     experiments = lib.mkOption {
       type = types.attrsOf types.integer;
       description = "Enable Task's experimental features. See https://taskfile.dev/docs/experiments/";
-      default = {};
+      default = { };
     };
   };
 }
