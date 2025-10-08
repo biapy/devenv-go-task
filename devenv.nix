@@ -1,7 +1,4 @@
-{
-  inputs,
-  ...
-}:
+{ inputs, ... }:
 {
   # https://devenv.sh/basics/
   name = "Taskfile (go-task) devenv module";
