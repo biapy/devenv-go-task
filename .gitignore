@@ -12,3 +12,13 @@ Taskfile.dist.yml
 # Test artifacts
 coverage.out
 coverage.html
+
+# Devenv
+.devenv*
+devenv.local.nix
+
+# direnv
+.direnv
+
+# pre-commit
+.pre-commit-config.yaml
