@@ -41,15 +41,9 @@ in
     default = { };
   };
 
-  settings = lib.mkOption {
-    type = import ./types/settings.nix;
-    description = "Global taskfile settings";
-    default = { };
-  };
-
-  tasks = lib.mkOption {
-    type = import ./types/task.nix;
-    description = "Task definitions";
+  taskfile = lib.mkOption {
+    type = import ./types/taskfile.nix;
+    description = "Task Taskfile, stored in 'Taskfile.dist.yml'. See https://taskfile.dev/docs/reference/schema";
     default = { };
   };
 }
