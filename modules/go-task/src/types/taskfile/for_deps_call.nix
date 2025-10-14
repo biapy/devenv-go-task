@@ -2,7 +2,7 @@
 lib.types.submodule {
   options = {
     for = lib.mkOption {
-      type = import ./for.nix;
+      type = (import ./for.nix) {inherit lib;};
       description = "loop dependency over values";
       default = null;
     };
@@ -13,7 +13,7 @@ lib.types.submodule {
     };
 
     vars = lib.mkOption {
-      type = lib.types.attrsOf (import ./taskfile/variable.nix);
+      type = lib.types.attrsOf (import ./taskfile/variable.nix) {inherit lib;};
       description = "Values passed to the task called";
       default = { };
     };

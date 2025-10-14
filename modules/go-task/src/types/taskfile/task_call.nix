@@ -10,7 +10,7 @@ lib.types.submodule {
     };
 
     vars = lib.mkOption {
-      type = lib.types.attrsOf (import ./taskfile/variable.nix);
+      type = lib.types.attrsOf (import ./taskfile/variable.nix) {inherit lib;};
       description = "Values passed to the task called";
       default = { };
     };

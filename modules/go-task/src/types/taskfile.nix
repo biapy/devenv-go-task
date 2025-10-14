@@ -12,7 +12,7 @@ lib.types.submodule {
     };
 
     output = lib.mkOption {
-      type = lib.types.nullOr (import ./taskfile/output.nix);
+      type = lib.types.nullOr (import ./taskfile/output.nix) {inherit lib;};
       description = "Output mode for parallel tasks";
       defaultText = "interleaved";
       default = null;
@@ -32,25 +32,25 @@ lib.types.submodule {
     };
 
     includes = lib.mkOption {
-      type = lib.types.attrsOf (import ./taskfile/include.nix);
+      type = lib.types.attrsOf (import ./taskfile/include.nix) {inherit lib;};
       description = "Include other Taskfiles";
       default = { };
     };
 
     vars = lib.mkOption {
-      type = lib.types.attrsOf (import ./taskfile/variable.nix);
+      type = lib.types.attrsOf (import ./taskfile/variable.nix) {inherit lib;};
       description = "Global variables";
       default = { };
     };
 
     env = lib.mkOption {
-      type = lib.types.attrsOf (import ./taskfile/variable.nix);
+      type = lib.types.attrsOf (import ./taskfile/variable.nix) {inherit lib;};
       description = "Global environment variables";
       default = { };
     };
 
     tasks = lib.mkOption {
-      type = lib.types.attrsOf (import ./taskfile/task.nix);
+      type = lib.types.attrsOf (import ./taskfile/task.nix) {inherit lib;};
       description = "Task definitions";
       default = { };
     };

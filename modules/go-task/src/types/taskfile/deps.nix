@@ -9,9 +9,7 @@ lib.types.oneOf [
   lib.types.str
 
   # Complex Dependency
-  import
-  ./task_call.nix
+  (import ./task_call.nix)  {inherit lib;}
 
-  import
-  ./for_deps_call.nix
+  (import ./for_deps_call.nix)  {inherit lib;}
 ]

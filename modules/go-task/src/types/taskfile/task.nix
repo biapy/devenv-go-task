@@ -9,19 +9,19 @@ lib.types.oneOf [
   {
     options = {
       cmds = lib.mkOption {
-        type = lib.types.listOf (import ./cmd.nix);
+        type = lib.types.listOf (import ./cmd.nix) {inherit lib;};
         description = "A list of commands to be executed.";
         default = [ ];
       };
 
       cmd = lib.mkOption {
-        type = lib.types.nullOr (import ./cmd.nix);
+        type = lib.types.nullOr (import ./cmd.nix) {inherit lib;};
         description = "The command to be executed.";
         default = null;
       };
 
       deps = lib.mkOption {
-        type = lib.types.listOf (import ./deps.nix);
+        type = lib.types.listOf (import ./deps.nix) {inherit lib;};
         description = "Task dependencies";
         default = [ ];
       };
@@ -89,7 +89,7 @@ lib.types.oneOf [
       };
 
       preconditions = lib.mkOption {
-        type = lib.types.listOf (import ./precondition.nix);
+        type = lib.types.listOf (import ./precondition.nix) {inherit lib;};
         description = "A list of commands to check if this task should run. If a condition is not met, the task will error.";
         default = [ ];
       };
@@ -101,25 +101,25 @@ lib.types.oneOf [
       };
 
       set = lib.mkOption {
-        type = lib.types.nullOr (import ./shell-set.nix);
+        type = lib.types.nullOr (import ./shell-set.nix) {inherit lib;};
         description = "Enables POSIX shell options for all of a task's commands. See https://www.gnu.org/software/bash/manual/html_node/The-Set-Builtin.html";
         default = null;
       };
 
       shopt = lib.mkOption {
-        type = lib.types.nullOr (import ./shell-shopt.nix);
+        type = lib.types.nullOr (import ./shell-shopt.nix) {inherit lib;};
         description = "Enables Bash shell options for all of a task's commands. See https://www.gnu.org/software/bash/manual/html_node/The-Shopt-Builtin.html";
         default = null;
       };
 
       vars = lib.mkOption {
-        type = lib.types.attrsOf (import ./variable.nix);
+        type = lib.types.attrsOf (import ./variable.nix) {inherit lib;};
         description = "A set of variables that can be used in the task";
         default = { };
       };
 
       env = lib.mkOption {
-        type = lib.types.attrsOf (import ./variable.nix);
+        type = lib.types.attrsOf (import ./variable.nix) {inherit lib;};
         description = "A set of environment variables that will be made available to shell commands.";
         default = { };
       };
@@ -198,7 +198,7 @@ lib.types.oneOf [
       };
 
       requires = lib.mkOption {
-        type = import ./requires_obj.nix;
+        type = (import ./requires_obj.nix) {inherit lib;};
         description = "A list of variables which should be set if this task is to run, if any of these variables are unset the task will error and not run.";
         default = { };
       };

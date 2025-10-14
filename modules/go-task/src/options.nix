@@ -36,13 +36,13 @@ in
   };
 
   taskrc = lib.mkOption {
-    type = import ./types/taskrc.nix;
+    type = (import ./types/taskrc.nix) { inherit lib; };
     description = "Task configuration, stored in '.taskrc.yml'. See https://taskfile.dev/docs/reference/config";
     default = { };
   };
 
   taskfile = lib.mkOption {
-    type = import ./types/taskfile.nix;
+    type = (import ./types/taskfile.nix) { inherit lib; };
     description = "Task Taskfile, stored in 'Taskfile.dist.yml'. See https://taskfile.dev/docs/reference/schema";
     default = { };
   };

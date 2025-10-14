@@ -1,11 +1,11 @@
 { ... }:
 {
-  imports = [ ../default.nix ];
+  imports = [ ../modules/go-task/devenv.nix ];
 
   # Minimal configuration test
-  go-task.enable = true;
+  biapy.go-task.enable = true;
 
-  go-task.tasks = {
+  biapy.go-task.taskfile.tasks = {
     hello = {
       desc = "Say hello";
       cmds = [ "echo 'Hello from go-task!'" ];

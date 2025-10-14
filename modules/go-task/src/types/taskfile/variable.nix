@@ -5,22 +5,25 @@
   dynamic commands, references, or maps.
 */
 { lib, ... }:
-lib.types.nullOr lib.types.oneOf [
+let
+  inherit (lib) types mkOption;
+in
+types.nullOr types.oneOf [
   # Static Variables
-  lib.types.str
-  lib.types.bool
-  lib.types.str
-  lib.types.int
-  lib.types.listOf
-  lib.types.str
+  types.str
+  types.bool
+  types.str
+  types.int
+  types.listOf
+  types.str
 
   # Dynamic Variables (sh)
-  lib.types.submodule
+  types.submodule
   {
     description = "The value will be treated as a command and the output assigned to the variable";
     options = {
-      sh = lib.mkOption {
-        type = lib.types.str;
+      sh = mkOption {
+        type = types.str;
         description = "Command to initialize the variable value";
         defaultText = ''date -u +"%Y-%m-%dT%H:%M:%SZ"'';
       };
@@ -28,12 +31,12 @@ lib.types.nullOr lib.types.oneOf [
   }
 
   # Variable References (ref)
-  lib.types.submodule
+  types.submodule
   {
     description = "The value will be used to lookup the value of another variable which will then be assigned to this variable";
     options = {
-      ref = lib.mkOption {
-        type = lib.types.str;
+      ref = mkOption {
+        type = types.str;
         description = "Variable name";
         defaultText = "BASE_VERSION";
       };
@@ -41,11 +44,11 @@ lib.types.nullOr lib.types.oneOf [
   }
 
   # Map Variables (map)
-  lib.types.submodule
+  types.submodule
   {
     description = "The value will be treated as a literal map type and stored in the variable";
     options = {
-      map = lib.mkOption { type = lib.types.attrs; };
+      map = mkOption { type = types.attrs; };
     };
   }
 ]

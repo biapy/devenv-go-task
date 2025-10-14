@@ -1,9 +1,9 @@
 { ... }:
 {
-  imports = [ ../default.nix ];
+  imports = [ ../modules/go-task/devenv.nix ];
 
   # Comprehensive feature test
-  go-task = {
+  biapy.go-task = {
     enable = true;
     taskfile = "test/Taskfile.test.yml";
 
