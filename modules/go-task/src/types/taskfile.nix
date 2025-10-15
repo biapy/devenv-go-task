@@ -1,26 +1,44 @@
 { lib, ... }:
-lib.types.submodule {
+let
+  inherit (lib) types mkOption;
+  inherit (lib.types)
+    nullOr
+    listOf
+    oneOf
+    attrsOf
+    ;
+  localTypes = {
+    duration = types.strMatching "^[0-9]+(?:m|s|ms)$";
+    include = import ./taskfile/include.nix { inherit lib; };
+    variable = import ./taskfile/variable.nix { inherit lib; };
+    output = import ./taskfile/output.nix { inherit lib; };
+    tasks = import ./taskfile/tasks.nix { inherit lib; };
+    shell-set = import ./taskfile/shell-set.nix { inherit lib; };
+    shell-shopt = import ./taskfile/shell-shopt.nix { inherit lib; };
+  };
+in
+types.submodule {
   options = {
 
-    version = lib.mkOption {
-      type = lib.types.oneOf [
-        lib.types.str
-        lib.types.int
+    version = mkOption {
+      type = oneOf [
+        types.str
+        types.int
       ];
       description = "Taskfile version";
       default = "3";
     };
 
-    output = lib.mkOption {
-      type = lib.types.nullOr (import ./taskfile/output.nix) {inherit lib;};
+    output = mkOption {
+      type = nullOr localTypes.output;
       description = "Output mode for parallel tasks";
       defaultText = "interleaved";
       default = null;
     };
 
-    method = lib.mkOption {
-      type = lib.types.nullOr (
-        lib.types.enum [
+    method = mkOption {
+      type = nullOr (
+        types.enum [
           "checksum"
           "timestamp"
           "none"
@@ -31,71 +49,73 @@ lib.types.submodule {
       default = null;
     };
 
-    includes = lib.mkOption {
-      type = lib.types.attrsOf (import ./taskfile/include.nix) {inherit lib;};
+    includes = mkOption {
+      type = nullOr (attrsOf localTypes.include);
       description = "Include other Taskfiles";
-      default = { };
+      default = null;
     };
 
-    vars = lib.mkOption {
-      type = lib.types.attrsOf (import ./taskfile/variable.nix) {inherit lib;};
+    vars = mkOption {
+      type = nullOr (attrsOf localTypes.variable);
       description = "Global variables";
-      default = { };
+      default = null;
     };
 
-    env = lib.mkOption {
-      type = lib.types.attrsOf (import ./taskfile/variable.nix) {inherit lib;};
+    env = mkOption {
+      type = nullOr (attrsOf localTypes.variable);
       description = "Global environment variables";
-      default = { };
+      default = null;
     };
 
-    tasks = lib.mkOption {
-      type = lib.types.attrsOf (import ./taskfile/task.nix) {inherit lib;};
+    tasks = mkOption {
+      type = nullOr localTypes.tasks;
       description = "Task definitions";
-      default = { };
+      default = null;
     };
 
-    silent = lib.mkOption {
-      type = lib.types.nullOr lib.types.bool;
+    silent = mkOption {
+      type = nullOr types.bool;
       description = "Global silent mode";
       defaultText = "false";
       default = null;
     };
 
-    dotenv = lib.mkOption {
-      type = lib.types.listOf lib.types.str;
+    dotenv = mkOption {
+      type = nullOr (listOf types.str);
       description = "Dotenv files to load";
-      default = [ ];
+      default = null;
     };
 
-    run = lib.mkOption {
-      type = lib.types.nullOr lib.types.enum [
-        "always"
-        "once"
-        "when_changed"
-      ];
+    run = mkOption {
+      type = nullOr (
+        types.enum [
+          "always"
+          "once"
+          "when_changed"
+        ]
+      );
       description = "Default execution behavior for tasks";
       defaultText = "always";
       default = null;
 
     };
 
-    interval = lib.mkOption {
-      type = lib.types.nullOr lib.types.strMatching "^[0-9]+(?:m|s|ms)$";
+    interval = mkOption {
+      type = nullOr localTypes.duration;
       description = "Watch interval for file changes";
       defaultText = "100ms";
       default = null;
 
     };
 
-    set = lib.mkOption {
-      type = lib.types.nullOr (import ./taskfile/shell-set.nix);
+    set = mkOption {
+      type = nullOr localTypes.shell-set;
       description = "POSIX shell options for all commands";
       default = null;
     };
 
-    shopt = lib.mkOption {
-      type = lib.types.nullOr (import ./taskfile/shell-shopt.nix);
+    shopt = mkOption {
+      type = nullOr localTypes.shell-shopt;
       description = "Bash shell options for all commands";
       default = null;
     };

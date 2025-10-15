@@ -12,8 +12,9 @@
   - `pipefail` - Pipe failures propagate
 */
 { lib, ... }:
-lib.types.listOf (
-  lib.types.enum [
+let
+  inherit (lib.types) enum listOf;
+  setEnum = enum [
     "allexport"
     "a" # Export all variables
     "errexit"
@@ -27,5 +28,6 @@ lib.types.listOf (
     "xtrace"
     "x" # Print commands before execution
     "pipefail" # Pipe failures propagate
-  ]
-)
+  ];
+in
+listOf setEnum

@@ -1,25 +1,32 @@
 { lib, ... }:
-lib.types.submodule {
+let
+  inherit (lib) types mkOption;
+  localTypes = {
+    for = import ./for.nix { inherit lib; };
+    variable = import ./variable.nix { inherit lib; };
+  };
+in
+types.submodule {
   options = {
-    for = lib.mkOption {
-      type = (import ./for.nix) {inherit lib;};
+    for = mkOption {
+      type = localTypes.for;
       description = "loop dependency over values";
       default = null;
     };
 
-    task = lib.mkOption {
-      type = lib.types.str;
+    task = mkOption {
+      type = types.str;
       description = "Task name";
     };
 
-    vars = lib.mkOption {
-      type = lib.types.attrsOf (import ./taskfile/variable.nix) {inherit lib;};
+    vars = mkOption {
+      type = types.attrsOf localTypes.variable;
       description = "Values passed to the task called";
       default = { };
     };
 
-    silent = lib.mkOption {
-      type = lib.types.nullOr lib.types.bool;
+    silent = mkOption {
+      type = types.nullOr types.bool;
       description = "Silent mode disables echoing of command before Task runs it";
       defaultText = "false";
       default = null;

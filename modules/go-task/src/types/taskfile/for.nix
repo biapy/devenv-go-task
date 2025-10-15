@@ -2,48 +2,46 @@
   # For loop schema
 */
 { lib, ... }:
-lib.types.oneOf [
-  # For list
-  lib.types.listOf
-  lib.types.str
+let
+  inherit (lib) types mkOption;
 
-  # For attribute
-  lib.types.enum
-  [
-    "sources"
-    "generates"
-  ]
-
-  # For var
-  lib.types.submodule
-  {
-    description = "Which variables to iterate over. The variable will be split using any whitespace character by default. This can be changed by using the `split` attribute.";
-    options = {
-      var = lib.mkOption {
-        type = lib.types.str;
-        description = "Name of the variable to iterate over";
-      };
-      split = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
-        defaultText = ''" "'';
-        default = null;
-        description = "String to split the variable on";
-      };
-      as = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
-        description = "What the loop variable should be named.";
-        defaultText = "ITEM";
-        default = null;
+  localTypes = {
+    forList = types.listOf types.str;
+    forAttribute = types.enum [
+      "sources"
+      "generates"
+    ];
+    forVar = types.submodule {
+      options = {
+        var = mkOption {
+          type = types.str;
+          description = "Name of the variable to iterate over";
+        };
+        split = mkOption {
+          type = types.nullOr types.str;
+          defaultText = ''" "'';
+          default = null;
+          description = "String to split the variable on";
+        };
+        as = mkOption {
+          type = types.nullOr types.str;
+          description = "What the loop variable should be named.";
+          defaultText = "ITEM";
+          default = null;
+        };
       };
     };
-  }
 
-  # For matrix
-  lib.types.submodule
-  {
-    description = "A matrix of values to iterate over";
-    options = {
-      matrix = lib.types.attrsOf lib.types.list;
+    forMatrix = types.submodule {
+      options = {
+        matrix = types.attrsOf types.list;
+      };
     };
-  }
+  };
+in
+types.oneOf [
+  localTypes.forList
+  localTypes.forAttribute
+  localTypes.forVar
+  localTypes.forMatrix
 ]

@@ -1,25 +1,25 @@
 { lib, ... }:
 let
-  inherit (lib) types;
+  inherit (lib) types mkOption;
 in
 types.submodule {
   options = {
-    verbose = lib.mkOption {
+    verbose = mkOption {
       type = types.bool;
       description = "Enable verbose output for all tasks";
       default = false;
     };
 
-    concurrency = lib.mkOption {
+    concurrency = mkOption {
       type = types.nullOr types.integer;
       description = "Number of concurrent tasks to run";
       default = null;
     };
 
-    experiments = lib.mkOption {
-      type = types.attrsOf types.integer;
+    experiments = mkOption {
+      type = types.nullOr (types.attrsOf types.integer);
       description = "Enable Task's experimental features. See https://taskfile.dev/docs/experiments/";
-      default = { };
+      default = null;
     };
   };
 }

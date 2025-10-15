@@ -8,10 +8,12 @@
   - `nullglob` - Null glob expansion
 */
 { lib, ... }:
-lib.types.listOf (
-  lib.types.enum [
+let
+  inherit (lib.types) enum listOf;
+  shoptEnum = enum [
     "expand_aliases"
     "globstar"
     "nullglob"
-  ]
-)
+  ];
+in
+listOf shoptEnum

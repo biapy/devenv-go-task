@@ -4,66 +4,71 @@
   Configuration for including external Taskfiles.
 */
 { lib, ... }:
-lib.types.oneOf [
+let
+  inherit (lib) types mkOption;
+  localTypes = {
+    variable = import ./variable.nix { inherit lib; };
+  };
+in
+types.oneOf [
   # Path to the Taskfile or directory to include
-  lib.types.str
+  types.str
 
-  lib.types.submodule
+  types.submodule
   {
-    description = "Configuration for including external Taskfiles.";
     options = {
-      taskfile = lib.mkOption {
-        type = lib.types.str;
+      taskfile = mkOption {
+        type = types.str;
         description = "Path to the Taskfile or directory to include";
       };
 
-      dir = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
+      dir = mkOption {
+        type = types.nullOr types.str;
         description = "Working directory for included tasks";
         default = null;
       };
 
-      optional = lib.mkOption {
-        type = lib.types.nullOr lib.types.bool;
+      optional = mkOption {
+        type = types.nullOr types.bool;
         description = "Don't error if the included file doesn't exist";
         defaultText = "false";
         default = null;
       };
 
-      flatten = lib.mkOption {
-        type = lib.types.nullOr lib.types.bool;
+      flatten = mkOption {
+        type = types.nullOr types.bool;
         description = "Include tasks without namespace prefix";
         defaultText = "false";
         default = null;
       };
 
-      internal = lib.mkOption {
-        type = lib.types.nullOr lib.types.bool;
+      internal = mkOption {
+        type = types.nullOr types.bool;
         description = "Hide included tasks from command line and `--list`";
         defaultText = "false";
         default = null;
       };
 
-      aliases = lib.mkOption {
-        type = lib.types.listOf lib.types.str;
+      aliases = mkOption {
+        type = types.listOf types.str;
         description = "Alternative names for the namespace";
         default = [ ];
       };
 
-      excludes = lib.mkOption {
-        type = lib.types.listOf lib.types.str;
+      excludes = mkOption {
+        type = types.listOf types.str;
         description = "Tasks to exclude from inclusion";
         default = [ ];
       };
 
-      vars = lib.mkOption {
-        type = lib.types.attrsOf (import ./variable.nix);
+      vars = mkOption {
+        type = types.attrsOf localTypes.variable;
         description = "Variables to pass to the included Taskfile";
         default = { };
       };
 
-      checksum = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
+      checksum = mkOption {
+        type = types.nullOr types.str;
         description = "Expected checksum of the included file";
         default = null;
       };
