@@ -38,15 +38,15 @@ types.submodule {
     };
 
     set = mkOption {
-      type = types.nullOr localTypes.shell-set;
+      type = localTypes.shell-set;
       description = "Enables POSIX shell options for this command. See https://www.gnu.org/software/bash/manual/html_node/The-Set-Builtin.html";
-      default = null;
+      default = [ ];
     };
 
     shopt = mkOption {
-      type = types.nullOr localTypes.shell-opt;
+      type = localTypes.shell-opt;
       description = "Enables Bash shell options for this command. See https://www.gnu.org/software/bash/manual/html_node/The-Shopt-Builtin.html";
-      default = null;
+      default = [ ];
     };
   };
 }

@@ -24,8 +24,21 @@ lib.mkIf config.biapy.go-task.enable (
 
     cfg = config.biapy.go-task;
 
+    defaultListTask = {
+      desc = "List available tasks";
+      cmds = [ "task --list" ];
+      aliases = [ "default" ];
+      silent = true;
+    };
+
+    taskfile = cfg.taskfile // {
+      tasks = cfg.taskfile.tasks // {
+        list = cfg.taskfile.tasks.list or defaultListTask;
+      };
+    };
+
     isNotEmpty = _: value: value != null && value != [ ] && value != { };
-    filteredTaskfile = filterAttrsRecursive isNotEmpty cfg.taskfile;
+    filteredTaskfile = filterAttrsRecursive isNotEmpty taskfile;
 
     # Convert to YAML string (toYAML(options, value))
     yamlContent = toJSON filteredTaskfile;

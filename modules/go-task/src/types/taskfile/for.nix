@@ -42,6 +42,9 @@ in
 types.oneOf [
   localTypes.forList
   localTypes.forAttribute
-  localTypes.forVar
-  localTypes.forMatrix
+  /**
+    localTypes.forVar
+    localTypes.forMatrix
+  */
+  types.attrs
 ]

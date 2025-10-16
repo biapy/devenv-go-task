@@ -9,8 +9,7 @@ lib.types.oneOf [
   lib.types.str
 
   # Precondition with custom message
-  lib.types.submodule
-  {
+  (lib.types.submodule {
     description = "Precondition with custom message.";
     options = {
       sh = lib.mkOption {
@@ -24,5 +23,5 @@ lib.types.oneOf [
         default = null;
       };
     };
-  }
+  })
 ]

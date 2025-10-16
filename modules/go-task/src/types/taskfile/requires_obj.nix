@@ -12,9 +12,9 @@ let
         };
 
         enum = mkOption {
-          type = types.nullOr (types.listOf types.str);
+          type = types.listOf types.str;
           description = "Accepted variable values";
-          default = null;
+          default = [ ];
         };
       };
     };

@@ -2,10 +2,11 @@
 let
   inherit (lib) types mkOption;
   inherit (lib.types)
-    nullOr
-    listOf
-    oneOf
     attrsOf
+    listOf
+    nullOr
+    oneOf
+    submodule
     ;
   localTypes = {
     duration = types.strMatching "^[0-9]+(?:m|s|ms)$";
@@ -17,7 +18,7 @@ let
     shell-shopt = import ./taskfile/shell-shopt.nix { inherit lib; };
   };
 in
-types.submodule {
+submodule {
   options = {
 
     version = mkOption {
@@ -50,27 +51,34 @@ types.submodule {
     };
 
     includes = mkOption {
-      type = nullOr (attrsOf localTypes.include);
+      type = attrsOf localTypes.include;
       description = "Include other Taskfiles";
-      default = null;
+      default = { };
     };
 
     vars = mkOption {
-      type = nullOr (attrsOf localTypes.variable);
+      type = attrsOf localTypes.variable;
       description = "Global variables";
-      default = null;
+      default = { };
     };
 
     env = mkOption {
-      type = nullOr (attrsOf localTypes.variable);
+      type = attrsOf localTypes.variable;
       description = "Global environment variables";
-      default = null;
+      default = { };
     };
 
     tasks = mkOption {
-      type = nullOr localTypes.tasks;
+      type = localTypes.tasks;
       description = "Task definitions";
-      default = null;
+      default = {
+        list = {
+          desc = "List available tasks";
+          cmds = [ "task --list" ];
+          aliases = [ "default" ];
+          silent = true;
+        };
+      };
     };
 
     silent = mkOption {
@@ -81,9 +89,9 @@ types.submodule {
     };
 
     dotenv = mkOption {
-      type = nullOr (listOf types.str);
+      type = listOf types.str;
       description = "Dotenv files to load";
-      default = null;
+      default = [ ];
     };
 
     run = mkOption {
@@ -109,15 +117,15 @@ types.submodule {
     };
 
     set = mkOption {
-      type = nullOr localTypes.shell-set;
+      type = localTypes.shell-set;
       description = "POSIX shell options for all commands";
-      default = null;
+      default = [ ];
     };
 
     shopt = mkOption {
-      type = nullOr localTypes.shell-shopt;
+      type = localTypes.shell-shopt;
       description = "Bash shell options for all commands";
-      default = null;
+      default = [ ];
     };
 
   };

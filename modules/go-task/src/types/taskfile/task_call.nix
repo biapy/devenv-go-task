@@ -4,11 +4,12 @@
 { lib, ... }:
 let
   inherit (lib) types mkOption;
+  inherit (lib.types) submodule nullOr attrsOf;
   localTypes = {
     variable = import ./variable.nix { inherit lib; };
   };
 in
-types.submodule {
+submodule {
   options = {
     task = mkOption {
       type = types.str;
@@ -16,13 +17,13 @@ types.submodule {
     };
 
     vars = mkOption {
-      type = types.attrsOf localTypes.variable;
+      type = attrsOf localTypes.variable;
       description = "Values passed to the task called";
       default = { };
     };
 
     silent = mkOption {
-      type = types.nullOr types.bool;
+      type = nullOr types.bool;
       description = "Hides task name and command from output. The command's output will still be redirected to `STDOUT` and `STDERR`.";
       defaultText = "false";
       default = null;

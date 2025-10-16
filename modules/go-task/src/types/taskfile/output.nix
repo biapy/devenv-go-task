@@ -5,15 +5,13 @@
 */
 { lib, ... }:
 lib.types.oneOf [
-  lib.types.enum
-  [
+  (lib.types.enum [
     "interleaved"
     "group"
     "prefixed"
-  ]
+  ])
 
-  lib.types.submodule
-  {
+  (lib.types.submodule {
     options = {
       group = lib.mkOption {
         type = lib.types.submodule {
@@ -38,5 +36,5 @@ lib.types.oneOf [
         };
       };
     };
-  }
+  })
 ]
