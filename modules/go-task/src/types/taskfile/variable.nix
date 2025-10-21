@@ -7,11 +7,7 @@
 { lib, ... }:
 let
   inherit (lib) types;
-  inherit (lib.types)
-    nullOr
-    listOf
-    oneOf
-    ;
+  inherit (lib.types) nullOr listOf oneOf;
 
   /*
     inherit (lib) types mkOption;
