@@ -14,39 +14,147 @@
   pkgs,
   ...
 }:
-lib.mkIf config.biapy.go-task.enable (
-  let
-    inherit (pkgs) yq-go;
-    inherit (lib.attrsets) filterAttrsRecursive;
-    inherit (builtins) toJSON;
+let
+  inherit (pkgs) yq-go;
+  inherit (lib.attrsets)
+    isAttrs
+    filterAttrsRecursive
+    attrNames
+    mergeAttrsList
+    zipAttrsWith
+    ;
+  inherit (lib.strings) isString splitString concatStringsSep;
+  inherit (lib.lists)
+    all
+    concatLists
+    flatten
+    head
+    isList
+    last
+    length
+    map
+    range
+    tail
+    take
+    unique
+    uniqueStrings
+    ;
+  inherit (builtins) toJSON;
 
-    yqCommand = lib.meta.getExe yq-go;
+  cfg = config.biapy.go-task;
+  yqCommand = lib.meta.getExe yq-go;
 
-    cfg = config.biapy.go-task;
+  prefixSeparator = cfg.prefixed-tasks.separator;
 
-    defaultListTask = {
+  # Split a string by ':' and return all cumulative prefixes
+  getPrefixes =
+    str:
+    assert isString str;
+    let
+      parts = splitString prefixSeparator str;
+    in
+    map (i: concatStringsSep prefixSeparator (take i parts)) (range 1 ((length parts) - 1));
+
+  escapeRegex =
+    char:
+    assert isString char;
+    let
+      escapedCharacters = [
+        "["
+        "]"
+        "."
+        "$"
+        "^"
+        "|"
+      ];
+    in
+    if builtins.elem char escapedCharacters then "\\" + char else char;
+
+  buildPrefixRunnerTask =
+    taskPrefix:
+    assert isString taskPrefix;
+    let
+      escapedSeparator = escapeRegex prefixSeparator;
+      grepExtendedRegexp = "{{.TASK}}${escapedSeparator}[^${escapedSeparator}]+$";
+    in
+    {
+      "${taskPrefix}" = {
+        desc = "Run all tasks starting with '${taskPrefix}${prefixSeparator}'";
+        vars = {
+          TASKS = {
+            sh = concatStringsSep " | " [
+              "task --json --list-all"
+              "yq '.tasks[].name'"
+              "grep --only-matching --extended-regexp '${grepExtendedRegexp}'"
+            ];
+          };
+        };
+        cmds = [
+          {
+            for = {
+              var = "TASKS";
+            };
+            cmd = "task '{{.ITEM}}'";
+          }
+        ];
+        silent = true;
+        requires.vars = [ "DEVENV_ROOT" ];
+      };
+    };
+
+  # Get all unique prefixes from a list of strings
+  tasksNames = attrNames cfg.taskfile.tasks;
+  tasksPrefixes = uniqueStrings (flatten (map getPrefixes tasksNames));
+  prefixRunnerTasks = mergeAttrsList (map buildPrefixRunnerTask tasksPrefixes);
+
+  defaultListTask = {
+    list = {
       desc = "List available tasks";
       cmds = [ "task --list" ];
       aliases = [ "default" ];
       silent = true;
     };
+  };
 
-    taskfile = cfg.taskfile // {
-      tasks = cfg.taskfile.tasks // {
-        list = cfg.taskfile.tasks.list or defaultListTask;
-      };
-    };
+  # See https://discourse.nixos.org/t/nix-function-to-merge-attributes-records-recursively-and-concatenate-arrays/2030/7
+  # See https://stackoverflow.com/questions/54504685/nix-function-to-merge-attributes-records-recursively-and-concatenate-arrays/54505212#54505212
+  recursiveMerge =
+    attrList:
+    let
+      f =
+        attrPath:
+        zipAttrsWith (
+          n: values:
+          if tail values == [ ] then
+            head values
+          else if all isList values then
+            unique (concatLists values)
+          else if all isAttrs values then
+            f (attrPath ++ [ n ]) values
+          else
+            last values
+        );
+    in
+    f [ ] attrList;
 
-    isNotEmpty = _: value: value != null && value != [ ] && value != { };
-    filteredTaskfile = filterAttrsRecursive isNotEmpty taskfile;
+  tasks = defaultListTask // (if cfg.prefixed-tasks.enable then prefixRunnerTasks else { });
 
-    # Convert to YAML string (toYAML(options, value))
-    yamlContent = toJSON filteredTaskfile;
+  taskfile = recursiveMerge [
+    cfg.taskfile
+    { inherit tasks; }
+  ];
 
-    # Create the taskfile
-    taskfileFile = pkgs.writeText "taskfile" yamlContent;
-  in
-  {
+  isNotEmpty = _: value: value != null && value != [ ] && value != { };
+  filteredTaskfile = filterAttrsRecursive isNotEmpty taskfile;
+
+  # Convert to YAML string (toYAML(options, value))
+  yamlContent = toJSON filteredTaskfile;
+
+  # Create the taskfile as JSON (compatible with YAML)
+  taskfileFile = pkgs.writeText "taskfile.json" yamlContent;
+in
+{
+  config = lib.mkIf cfg.enable {
     packages = [
       cfg.package
       yq-go
@@ -56,5 +164,5 @@ lib.mkIf config.biapy.go-task.enable (
       ${yqCommand} --input-format 'json' --output-format 'yaml' '${taskfileFile}' > '${cfg.taskfilePath}'
       echo 'Generated ${cfg.taskfilePath} with ${toString (lib.length (lib.attrNames cfg.taskfile.tasks))} tasks'
     '';
-  }
-)
+  };
+}
