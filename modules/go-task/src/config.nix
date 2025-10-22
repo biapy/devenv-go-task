@@ -79,7 +79,7 @@ let
     in
     {
       "${taskPrefix}" = {
-        desc = "🗂️ Run '${taskPrefix}${prefixSeparator}*' tasks";
+        summary = "🗂️ Run '${taskPrefix}${prefixSeparator}*' tasks";
         vars = {
           TASKS = {
             sh = concatStringsSep " | " [
@@ -99,7 +99,6 @@ let
         ];
         silent = true;
         ignore_error = true;
-        internal = true;
         requires.vars = [ "DEVENV_ROOT" ];
       };
     };
