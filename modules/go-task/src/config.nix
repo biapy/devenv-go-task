@@ -79,7 +79,7 @@ let
     in
     {
       "${taskPrefix}" = {
-        desc = "Run all tasks starting with '${taskPrefix}${prefixSeparator}'";
+        desc = "Run '${taskPrefix}${prefixSeparator}' tasks";
         vars = {
           TASKS = {
             sh = concatStringsSep " | " [
@@ -95,6 +95,7 @@ let
               var = "TASKS";
             };
             cmd = "task '{{.ITEM}}'";
+            ignore_error = true;
           }
         ];
         silent = true;
