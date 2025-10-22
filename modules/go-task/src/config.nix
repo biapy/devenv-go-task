@@ -99,6 +99,7 @@ let
         ];
         silent = true;
         ignore_error = true;
+        internal = true;
         requires.vars = [ "DEVENV_ROOT" ];
       };
     };
