@@ -1,35 +1,35 @@
 {
   "nodes": {
-    "devenv": {
-      "locked": {
-        "dir": "src/modules",
-        "lastModified": 1759871026,
-        "owner": "cachix",
-        "repo": "devenv",
-        "rev": "79171b23a81519709d056140a112f596a2555517",
-        "type": "github"
-      },
-      "original": {
-        "dir": "src/modules",
-        "owner": "cachix",
-        "repo": "devenv",
-        "type": "github"
-      }
-    },
-    "devenv-recipes": {
+    "biapy-recipes": {
       "flake": false,
       "locked": {
         "dir": "src",
-        "lastModified": 1759295458,
+        "lastModified": 1761164136,
         "owner": "biapy",
         "repo": "devenv-recipes",
-        "rev": "e3ce08e75484580ad12163723db9d9b33b024436",
+        "rev": "e408b1ed772ebe34dbbe9c4ccccbb510d81853ad",
         "type": "github"
       },
       "original": {
         "dir": "src",
         "owner": "biapy",
         "repo": "devenv-recipes",
+        "type": "github"
+      }
+    },
+    "devenv": {
+      "locked": {
+        "dir": "src/modules",
+        "lastModified": 1761156818,
+        "owner": "cachix",
+        "repo": "devenv",
+        "rev": "949fc6dc8f36f38e1cceb1bf1673c4e995a6a766",
+        "type": "github"
+      },
+      "original": {
+        "dir": "src/modules",
+        "owner": "cachix",
+        "repo": "devenv",
         "type": "github"
       }
     },
@@ -57,10 +57,10 @@
         ]
       },
       "locked": {
-        "lastModified": 1759523803,
+        "lastModified": 1760663237,
         "owner": "cachix",
         "repo": "git-hooks.nix",
-        "rev": "cfc9f7bb163ad8542029d303e599c0f7eee09835",
+        "rev": "ca5b894d3e3e151ffc1db040b6ce4dcc75d31c37",
         "type": "github"
       },
       "original": {
@@ -106,10 +106,10 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1759826507,
+        "lastModified": 1760965567,
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "bce5fe2bb998488d8e7e7856315f90496723793c",
+        "rev": "cb82756ecc37fa623f8cf3e88854f9bf7f64af93",
         "type": "github"
       },
       "original": {
@@ -121,8 +121,8 @@
     },
     "root": {
       "inputs": {
+        "biapy-recipes": "biapy-recipes",
         "devenv": "devenv",
-        "devenv-recipes": "devenv-recipes",
         "git-hooks": "git-hooks",
         "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable",

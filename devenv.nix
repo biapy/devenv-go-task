@@ -1,15 +1,15 @@
-{ inputs, ... }:
-{
+_: {
   # https://devenv.sh/basics/
   name = "Taskfile (go-task) devenv module";
 
-  imports = [
-    "${inputs.devenv-recipes}/devenv-scripts.nix"
-    "${inputs.devenv-recipes}/git.nix"
-    "${inputs.devenv-recipes}/markdown"
-    "${inputs.devenv-recipes}/nix"
-    "${inputs.devenv-recipes}/secrets"
-  ];
+  biapy.go-task.enable = true;
+  biapy-recipes = {
+    git.enable = true;
+    nix.enable = true;
+    markdown.enable = true;
+    shell.enable = true;
+    secrets.gitleaks.enable = true;
+  };
 
   # https://devenv.sh/packages/
   # packages = [ ];
