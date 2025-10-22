@@ -95,10 +95,10 @@ let
               var = "TASKS";
             };
             cmd = "task '{{.ITEM}}'";
-            ignore_error = true;
           }
         ];
         silent = true;
+        ignore_error = true;
         requires.vars = [ "DEVENV_ROOT" ];
       };
     };
