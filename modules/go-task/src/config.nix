@@ -79,7 +79,7 @@ let
     in
     {
       "${taskPrefix}" = {
-        desc = "Run '${taskPrefix}${prefixSeparator}' tasks";
+        desc = "🗂️ Run '${taskPrefix}${prefixSeparator}*' tasks";
         vars = {
           TASKS = {
             sh = concatStringsSep " | " [
