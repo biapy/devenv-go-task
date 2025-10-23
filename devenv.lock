@@ -4,10 +4,10 @@
       "flake": false,
       "locked": {
         "dir": "src",
-        "lastModified": 1761164136,
+        "lastModified": 1761230606,
         "owner": "biapy",
         "repo": "devenv-recipes",
-        "rev": "e408b1ed772ebe34dbbe9c4ccccbb510d81853ad",
+        "rev": "42062b0e7cd7f4616863190117426668a9c6d4dd",
         "type": "github"
       },
       "original": {
