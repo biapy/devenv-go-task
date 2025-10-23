@@ -6,18 +6,14 @@
 { lib, ... }:
 let
   inherit (lib) types;
-  /*
-    localTypes = {
-      task_call = import ./task_call.nix { inherit lib; };
-      for_deps_call = import ./for_deps_call.nix { inherit lib; };
-    };
-  */
+  inherit (lib.types) either oneOf;
+
+  localTypes = {
+    task_call = import ./task_call.nix { inherit lib; };
+    for_deps_call = import ./for_deps_call.nix { inherit lib; };
+  };
 in
-types.oneOf [
-  types.str
-  /*
-    localTypes.task_call
-    localTypes.for_deps_call
-  */
-  types.attrs
+oneOf [
+  (either types.str localTypes.task_call)
+  (either types.str localTypes.task_call)
 ]
