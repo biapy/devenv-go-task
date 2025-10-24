@@ -89,12 +89,12 @@ let
             ];
           };
         };
-        cmds = [
+        deps = [
           {
             for = {
               var = "TASKS";
             };
-            cmd = "task '{{.ITEM}}'";
+            task = "{{.ITEM}}";
           }
         ];
         silent = true;
