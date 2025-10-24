@@ -89,7 +89,7 @@ let
             ];
           };
         };
-        deps = [
+        cmds = [
           {
             for = {
               var = "TASKS";
