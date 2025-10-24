@@ -9,7 +9,7 @@ types.submodule {
   options = {
     defer = mkOption {
       type = localTypes.task_call;
-      description = "Run a command when the task completes. This command will run even when the task fails";
+      description = "Run a task when the task completes. This command will run even when the task fails";
     };
   };
 }

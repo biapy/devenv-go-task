@@ -7,7 +7,6 @@ let
   inherit (lib.options) mkOption;
   inherit (lib.types)
     either
-    oneOf
     nullOr
     listOf
     attrsOf
@@ -47,7 +46,6 @@ let
     };
   };
 in
-oneOf [
-  (either localTypes.forList localTypes.forVar)
-  (either localTypes.forAttribute localTypes.forMatrix)
-]
+either (either localTypes.forList localTypes.forVar) (
+  either localTypes.forAttribute localTypes.forMatrix
+)

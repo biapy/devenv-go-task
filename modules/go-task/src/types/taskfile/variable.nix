@@ -53,7 +53,6 @@ let
 in
 nullOr (oneOf [
   # Static Variables
-  types.str
   (either types.bool localTypes.dynamicVariable)
   (either types.str localTypes.variableReference)
   (either types.int localTypes.mapVariable)

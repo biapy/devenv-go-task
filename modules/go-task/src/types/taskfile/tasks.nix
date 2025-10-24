@@ -4,6 +4,7 @@ let
   inherit (lib.types)
     attrsOf
     listOf
+    nullOr
     oneOf
     either
     ;
@@ -21,7 +22,7 @@ let
 in
 # String command
 attrsOf (oneOf [
-  types.str
+  (nullOr types.str)
   localTypes.task
   localTypes.taskList
 ])

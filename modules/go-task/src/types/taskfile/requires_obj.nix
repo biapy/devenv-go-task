@@ -1,6 +1,7 @@
 { lib, ... }:
 let
   inherit (lib) types mkOption;
+  inherit (lib.types) either listOf;
 
   localTypes = {
     requirement = types.submodule {
@@ -8,11 +9,10 @@ let
         name = mkOption {
           type = types.str;
           description = "Required variable name";
-
         };
 
         enum = mkOption {
-          type = types.listOf types.str;
+          type = listOf types.str;
           description = "Accepted variable values";
           default = [ ];
         };
@@ -25,12 +25,7 @@ types.submodule {
   options = {
     vars = mkOption {
       description = "List of variables that must be defined for the task to run";
-      type = types.listOf (
-        types.oneOf [
-          types.str
-          localTypes.requirement
-        ]
-      );
+      type = listOf (either types.str localTypes.requirement);
       default = [ ];
     };
   };
