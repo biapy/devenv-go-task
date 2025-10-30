@@ -19,7 +19,6 @@ let
   localTypes = {
     # Dynamic Variables (sh)
     dynamicVariable = submodule {
-      description = "The value will be treated as a command and the output assigned to the variable";
       options = {
         sh = mkOption {
           type = types.str;
@@ -31,11 +30,10 @@ let
 
     # Variable References (ref)
     variableReference = submodule {
-      description = "The value will be used to lookup the value of another variable which will then be assigned to this variable";
       options = {
         ref = mkOption {
           type = types.str;
-          description = "Variable name";
+          description = "Variable name. The value will be used to lookup the value of another variable which will then be assigned to this variable";
           defaultText = "BASE_VERSION";
         };
       };
@@ -43,9 +41,11 @@ let
 
     # Map Variables (map)
     mapVariable = submodule {
-      description = "The value will be treated as a literal map type and stored in the variable";
       options = {
-        map = mkOption { type = types.attrs; };
+        map = mkOption {
+          type = types.attrs;
+          description = "The value will be treated as a literal map type and stored in the variable";
+        };
       };
     };
   };
