@@ -58,13 +58,11 @@ submodule {
 
     vars = mkOption {
       type = attrsOf localTypes.variable;
-      description = "Global variables";
       default = { };
     };
 
     env = mkOption {
       type = attrsOf localTypes.variable;
-      description = "Global environment variables";
       default = { };
     };
 
