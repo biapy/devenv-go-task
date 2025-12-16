@@ -16,13 +16,13 @@ words:
 # For example "hte" should be "the"
 flagWords: []
 import:
-  - '@cspell/dict-en_us/cspell-ext.json'
-  - '@cspell/dict-en-common-misspellings/cspell-ext.json'
-  - '@cspell/dict-companies/cspell-ext.json'
-  - '@cspell/dict-software-terms/cspell-ext.json'
-  - '@cspell/dict-markdown/cspell-ext.json'
-  - '@cspell/dict-public-licenses/cspell-ext.json'
-  - '@cspell/dict-git/cspell-ext.json'
+  - 'https://unpkg.com/@cspell/dict-en_us@latest/cspell-ext.json'
+  - 'https://unpkg.com/@cspell/dict-en-common-misspellings@latest/cspell-ext.json'
+  - 'https://unpkg.com/@cspell/dict-companies@latest/cspell-ext.json'
+  - 'https://unpkg.com/@cspell/dict-software-terms@latest/cspell-ext.json'
+  - 'https://unpkg.com/@cspell/dict-markdown@latest/cspell-ext.json'
+  - 'https://unpkg.com/@cspell/dict-public-licenses@latest/cspell-ext.json'
+  - 'https://unpkg.com/@cspell/dict-git@latest/cspell-ext.json'
 languageSettings:
   - languageId: md
     dictionaries:
