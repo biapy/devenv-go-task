@@ -27,7 +27,7 @@ oneOf [
     localTypes.defer_cmd_call
     localTypes.for_cmds_call
 
-    replaced by type.attrs
+    replaced by (types.attrsOf types.anything)
   */
-  types.attrs
+  (types.attrsOf types.anything)
 ]

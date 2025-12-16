@@ -43,7 +43,7 @@ let
     mapVariable = submodule {
       options = {
         map = mkOption {
-          type = types.attrs;
+          type = types.attrsOf types.anything;
           description = "The value will be treated as a literal map type and stored in the variable";
         };
       };
